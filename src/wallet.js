@@ -114,7 +114,7 @@ const Wallet = () => {
 
 
 return(
-    <div className='Main'>
+    <div className='mainContainer'>
         <h2>{tokenName + " ERC-20 Wallet"}</h2>
         <button className='Button' onClick={connectWalletHandler}>{connButtonText}</button>
         <div className="walletCard">
