@@ -5,7 +5,7 @@ import './styles.css';
 const Interactions = (props) => {
 
 	const [transferHash, setTransferHash] = useState();
-
+	const [alltransactions, setAllTransactions] = useState([]);
 
     const mintTokenHandler = async (e) => {
 		e.preventDefault();
@@ -47,13 +47,32 @@ const Interactions = (props) => {
 		setTransferHash("Transfer confirmation hash: " + txt.hash);
 	}
 
+	const getTransactions = async () => {
+		let transactions = await props.contract.getTransactionsByAddress();
+        console.log(transactions);
+        
+
+        let transactioncleaned = [];
+        transactions.forEach(transaction => {
+          transactioncleaned.push({
+            address: transaction.to,
+            amount: transaction.amount,
+			data: transaction.data,
+            executed: transaction.executed,
+          });
+        });
+		setAllTransactions(transactioncleaned);
+        console.log(transactions);
+	}
+	getTransactions();
+
 	return (
 			<div className="interactionsCard">
                 <form onSubmit={mintTokenHandler}>
                     <div>
                         <h3>Mint Token</h3>
                         <p>Enter Amount</p>
-                        <input type='number' id='mintAmount' min='0' step='1' placeholder="Governors only allowed"/>
+                        <input type='number' id='mintAmount' min='0' step='1' placeholder=""/>
 
 						<button type='submit' className="button">Mint</button>
                     </div>
@@ -93,6 +112,33 @@ const Interactions = (props) => {
 							{transferHash}
 						</div>
 			</form>
+
+			{alltransactions.map((transaction, index) => {
+          return (
+            <div key={index} className="key">
+            
+            <table>
+        <tr>
+          <th>Address</th>
+          <th>{transaction.to}</th>
+        </tr>
+        <tr>
+          <th>Amount</th>
+          <th>{transaction.amount}</th>
+        </tr>
+        <tr>
+          <th>Data</th>
+          <th>{transaction.data}</th>
+        </tr>
+        
+        <tr>
+          <th>Executed</th>
+          <th>{transaction.executed}</th>
+        </tr>
+      </table>
+            </div>
+              );
+          })}
 			</div>
 		)
 	

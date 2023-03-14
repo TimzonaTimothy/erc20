@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-//used these addresses ["0x109D25547BD97E4ED7f8362f27e50F084521D033","0x667E5B64873B08B129eD730260d78B4739263Ead"] in deployment and set the required governors to 2
+//used these address ["0x109D25547BD97E4ED7f8362f27e50F084521D033"] in deployment and set the required number of confirmation of mint and burn to 1
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v4.3/contracts/token/ERC20/ERC20.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v4.3/contracts/access/Ownable.sol";
@@ -33,7 +33,7 @@ contract GNaira is ERC20 {
   // mapping to check if an address is an owner of the contract
   mapping(address => bool) public isOwner;
   uint public required;
-
+  
   //mapping to check if an address is blacklisted
   mapping(address=> bool) isBlacklisted;
 
@@ -69,6 +69,7 @@ contract GNaira is ERC20 {
 
   //constructor function for the contract, which initializes the owners and the required number of the owners
   constructor(address[] memory _owners, uint _required) ERC20("G-Naira", "gNGN") {
+    
     require(_owners.length > 0, "MultiSigWallet::constructor: there must be at least one owner");
     require(_required > 0 && _required <= _owners.length, "MultiSigWallet::constructor: invalid required number of owners");
 
@@ -121,6 +122,30 @@ contract GNaira is ERC20 {
     emit Submit(transactions.length - 1);
     
   }
+
+  function transactionCount() public view returns(uint){
+    return transactions.length;
+  }
+
+
+//this function helps to tracks all the mint and burn transactions made by a particular address
+function getTransactionsByAddress(address _address) public view returns (Transaction[] memory) {
+    uint count = 0;
+    for (uint i = 0; i < transactions.length; i++) {
+        if (transactions[i].to == _address) {
+            count++;
+        }
+    }
+    Transaction[] memory result = new Transaction[](count);
+    count = 0;
+    for (uint i = 0; i < transactions.length; i++) {
+        if (transactions[i].to == _address) {
+            result[count] = transactions[i];
+            count++;
+        }
+    }
+    return result;
+}
 
   //burn function
   function burn(uint _amount) external onlyGovernor {

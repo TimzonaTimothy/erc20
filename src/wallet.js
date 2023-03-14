@@ -5,7 +5,7 @@ import './styles.css';
 import Interactions from './interactions.js'
 
 const Wallet = () => {
-    let contractAddress = "0x710766fe5f175e8abad6cdad4818268621a9c234";
+    let contractAddress = "0x3d060e6f00372b62cd65aa92a1f74a7f4534b96d";
     const [errorMessage, setErrorMessage] = useState(null);
 	const [defaultAccount, setDefaultAccount] = useState(null);
 	const [connButtonText, setConnButtonText] = useState('Connect Wallet');
