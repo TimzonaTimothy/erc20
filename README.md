@@ -1,4 +1,4 @@
-### GNaira Token Contract - Readme
+# GNaira Token Contract - Readme
 
 This repository contains the Solidity smart contract for the GNaira (gNGN) token. GNaira is an ERC20 token contract that also implements multi-signature functionality for secure and controlled operations.
 
