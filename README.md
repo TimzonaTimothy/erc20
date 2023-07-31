@@ -1,70 +1,86 @@
-# Getting Started with Create React App
+### GNaira Token Contract - Readme
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains the Solidity smart contract for the GNaira (gNGN) token. GNaira is an ERC20 token contract that also implements multi-signature functionality for secure and controlled operations.
 
-## Available Scripts
+## Contract Information
 
-In the project directory, you can run:
+License: MIT License
+Solidity Version: ^0.8.0
+Token Standard: ERC20
+Deployment
+The contract has been deployed with the following address:
 
-### `npm start`
+Token Contract Address: [0xCONTRACT_ADDRESS]
+During deployment, the contract was configured with the required number of confirmations for mint and burn transactions set to 1.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Dependencies
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+This contract depends on the following external libraries:
 
-### `npm test`
+OpenZeppelin ERC20 - An implementation of the ERC20 token standard.
+OpenZeppelin Ownable - Provides basic authorization control functions.
+These libraries are included using URLs directly in the contract code.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Functionality
 
-### `npm run build`
+Multi-Signature Functionality
+The GNaira contract implements multi-signature functionality, allowing multiple owners to collectively approve and execute specific transactions. Here are the key features related to multi-signature functionality:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Owners
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The contract is initialized with a list of owners who have the authority to approve transactions.
+An owner is identified by their Ethereum address.
+Only the owners can call functions that have the onlyGovernor modifier.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Transactions
 
-### `npm run eject`
+Transactions are submitted to the contract for approval before execution.
+Each transaction includes the recipient address, amount, transaction data (mint or burn), and execution status.
+Transactions are stored in the transactions array.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Approval Workflow
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Owners can approve or revoke their approval for a transaction.
+A transaction requires a specific number of approvals to be executed, as set during deployment.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Execution
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Transactions can only be executed by the contract when the required number of approvals is reached.
+The contract distinguishes between mint and burn transactions and executes the corresponding operations accordingly.
 
-## Learn More
+## Blacklist Functionality
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The contract includes functionality to blacklist specific addresses. When an address is blacklisted, it cannot send or receive GNaira tokens. Here are the key features related to the blacklist functionality:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The blackList function can be called by owners to blacklist an address, preventing it from interacting with the token.
+The removeFromBlacklist function can be called by owners to remove an address from the blacklist.
 
-### Code Splitting
+## Token Transfer
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The contract overrides the transfer function from the ERC20 token standard to include additional checks:
 
-### Analyzing the Bundle Size
+Before executing a token transfer, it checks if the sender and the recipient addresses are blacklisted. If either address is blacklisted, the transfer is rejected.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Events
 
-### Making a Progressive Web App
+The contract emits the following events to provide transparency and enable monitoring:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Deposit: Emitted when a transfer is made to a recipient address.
+Submit: Emitted when a transaction is submitted for approval.
+Approve: Emitted when an owner approves a transaction.
+Revoke: Emitted when an owner revokes their approval for a transaction.
+Execute: Emitted when a transaction is executed.
+blackListEvent: Emitted when an address is added to the blacklist.
+removeBlackListEvent: Emitted when an address is removed from the blacklist.
+Mint: Emitted when a mint transaction is executed.
+Burn: Emitted when a burn transaction is executed.
 
-### Advanced Configuration
+## Usage
+This contract provides a robust ERC20 token with multi-signature functionality. It is designed to be controlled by a group of owners who collectively approve and execute specific transactions. Additionally, it includes a blacklist feature to prevent certain addresses from using the token.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Note
+  This readme file is for informational purposes only and does not constitute legal or financial advice. Use the contract at your own risk and discretion. Before deploying or interacting with the contract, ensure you understand its functionality and implications. Review the contract code and its dependencies carefully. If you plan to use this contract in a production environment, consider seeking a professional security audit.
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
